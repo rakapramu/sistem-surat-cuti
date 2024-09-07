@@ -20,6 +20,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'nip',
+        'role',
+        'pangkat',
+        'jabatan'
     ];
 
     /**
@@ -43,5 +47,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function PengajuanCuti()
+    {
+        return $this->hasMany(PengajuanCuti::class);
     }
 }
