@@ -32,25 +32,60 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="basic-default-phone">Jenis Cuti Yang Diambil</label>
-                            <select name="cuti_id" class="form-select" id="">
+                            <select name="cuti_id"
+                                class="form-select @error('cuti_id')
+                                is-invalid
+                            @enderror"
+                                id="">
                                 <option disabled selected>--Pilih Cuti--</option>
                                 @foreach ($cutis as $item)
                                     <option value="{{ $item->id }}">{{ ucwords($item->jenis_cuti) }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="basic-default-message">Alasan Cuti</label>
-                            <textarea id="basic-default-message" class="form-control" name="alasan_cuti"></textarea>
+                            @error('cuti_id')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="tanggal_mulai_cuti">Tanggal Mulai Cuti</label>
-                            <input type="text" id="tanggal_mulai_cuti" class="form-control" name="tanggal_mulai_cuti">
+                            <input type="text" id="tanggal_mulai_cuti"
+                                class="form-control @error('tanggal_mulai_cuti')
+                                is-invalid
+                            @enderror"
+                                name="tanggal_mulai_cuti" value="{{ old('tanggal_mulai_cuti') }}" autocomplete="off">
+                            @error('tanggal_mulai_cuti')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="tanggal_selesai_cuti">Tanggal Selesai Cuti</label>
-                            <input type="text" id="tanggal_selesai_cuti" class="form-control"
-                                name="tanggal_selesai_cuti">
+                            <input type="text" id="tanggal_selesai_cuti"
+                                class="form-control @error('tanggal_selesai_cuti')
+                                is-invalid
+                            @enderror"
+                                name="tanggal_selesai_cuti" value="{{ old('tanggal_selesai_cuti') }}" autocomplete="off">
+                            @error('tanggal_selesai_cuti')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-message">Alasan Cuti</label>
+                            <textarea id="basic-default-message"
+                                class="form-control @error('alasan_cuti')
+                                is-invalid
+                            @enderror"
+                                name="alasan_cuti">{{ old('alasan_cuti') }}</textarea>
+                            @error('alasan_cuti')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary">Send</button>
                     </form>
@@ -63,12 +98,12 @@
     <script>
         $(document).ready(function() {
             $('#tanggal_mulai_cuti').datepicker({
-                format: 'dd-mm-yyyy',
+                format: 'yyyy-mm-dd',
                 autoclose: true,
                 todayHighlight: true
             });
             $('#tanggal_selesai_cuti').datepicker({
-                format: 'dd-mm-yyyy',
+                format: 'yyyy-mm-dd',
                 autoclose: true,
                 todayHighlight: true
             });

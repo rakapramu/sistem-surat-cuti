@@ -57,7 +57,7 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item active">
+        <li class="menu-item {{ Request::is('dashboard') ? 'active' : '' }}">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
@@ -90,13 +90,27 @@
                 </li>
             </ul>
         </li>
-        <li class="menu-item">
-            <a href="{{ route('cuti.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Jenis Cuti</div>
-            </a>
-        </li>
-        <li class="menu-item">
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'Admin')
+            <li class="menu-item {{ Request::is('dashboard/cuti*') ? 'active' : '' }}">
+                <a href="{{ route('cuti.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                    <div data-i18n="Analytics">Jenis Cuti</div>
+                </a>
+            </li>
+            <li class="menu-item {{ Request::is('dashboard/riwayat-pengajuan*') ? 'active' : '' }}">
+                <a href="{{ route('riwayatPengajuan') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                    <div data-i18n="Analytics">Riwayat Pengajuan</div>
+                </a>
+            </li>
+            <li class="menu-item {{ Request::is('dashboard/report*') ? 'active' : '' }}">
+                <a href="{{ route('report') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                    <div data-i18n="Analytics">Repor Pengajuan</div>
+                </a>
+            </li>
+        @endif
+        <li class="menu-item {{ Request::is('dashboard/pengajuan_cuti*') ? 'active' : '' }}">
             <a href="{{ route('pengajuan_cuti.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Pengajuan Cuti</div>

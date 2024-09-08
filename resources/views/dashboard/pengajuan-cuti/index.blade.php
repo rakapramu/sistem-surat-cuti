@@ -2,59 +2,85 @@
 @section('content')
     <div class="card">
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-header">Jenis Cuti</h5>
-            <a href="{{ route('cuti.create') }}" class="btn btn-primary mx-2">Create Data</a>
+            <h5 class="card-header">Pengajuan Cuti</h5>
+            <a href="{{ route('pengajuan_cuti.create') }}" class="btn btn-primary mx-2">Create Data</a>
         </div>
-        <div class="table-responsive text-nowrap">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Jenis Cuti</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                    @forelse ($datas as $item)
+        <div class="card-body">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover my-5">
+                    <thead>
                         <tr>
-                            <td>
-                                <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
-                                <strong>{{ ucwords($item->jenis_cuti) }}</strong>
-                            </td>
-                            <td class="text-center">
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('cuti.edit', $item->id) }}">
-                                            <i class="bx bx-edit-alt me-1"></i> Edit
-                                        </a>
-                                        <form id="delete-{{ $item->id }}"
-                                            action="{{ route('cuti.destroy', $item->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('delete')
-                                        </form>
+                            <th>Nama</th>
+                            <th>NIP</th>
+                            <th>Jenis Cuti</th>
+                            <th>Tanggal Mulai Cuti</th>
+                            <th>Tanggal Selesai Cuti</th>
+                            <th>Alasan Cuti</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @forelse ($cutis as $item)
+                            <tr>
+                                <td>
+                                    <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
+                                    <strong>{{ ucwords($item->user->name) }}</strong>
+                                </td>
+                                <td>
+                                    <strong>{{ $item->user->nip }}</strong>
+                                </td>
+                                <td>
+                                    <strong>{{ $item->jenisCuti->jenis_cuti }}</strong>
+                                </td>
+                                <td>
+                                    <strong>{{ $item->tanggal_mulai_cuti }}</strong>
+                                </td>
+                                <td>
+                                    <strong>{{ $item->tanggal_selesai_cuti }}</strong>
+                                </td>
+                                <td>
+                                    <strong>{{ $item->alasan_cuti }}</strong>
+                                </td>
+                                <td>
+                                    <strong>{{ $item->status }}</strong>
+                                </td>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="{{ route('pengajuan_cuti.edit', $item->id) }}">
+                                                <i class="bx bx-edit-alt me-1"></i> Edit
+                                            </a>
+                                            <form id="delete-{{ $item->id }}"
+                                                action="{{ route('pengajuan_cuti.destroy', $item->id) }}" method="POST"
+                                                style="display: none;">
+                                                @csrf
+                                                @method('delete')
+                                            </form>
 
-                                        <a class="dropdown-item" href="#"
-                                            onclick="event.preventDefault(); document.getElementById('delete-{{ $item->id }}').submit();">
-                                            <i class="bx bx-trash me-1"></i> Delete
-                                        </a>
+                                            <a class="dropdown-item" href="#"
+                                                onclick="event.preventDefault(); document.getElementById('delete-{{ $item->id }}').submit();">
+                                                <i class="bx bx-trash me-1"></i> Delete
+                                            </a>
+                                        </div>
+
                                     </div>
-
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="text-center">Data Kosong</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-            <div class="container">
-                {{ $datas->links('pagination::bootstrap-5') }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center">Data Kosong</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+                <div class="container">
+                    {{ $cutis->links('pagination::bootstrap-5') }}
+                </div>
             </div>
         </div>
     </div>

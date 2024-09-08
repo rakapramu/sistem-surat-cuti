@@ -15,7 +15,10 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/', function () {
         return view('dashboard.main');
     })->name('dashboard');
-    Route::resource('cuti', CutiController::class);
+    Route::resource('cuti', CutiController::class)->middleware('isAdmin');
     Route::resource('pengajuan_cuti', PengajuanCutiController::class);
+    Route::get('riwayat-pengajuan', [PengajuanCutiController::class, 'riwayat'])->name('riwayatPengajuan')->middleware('isAdmin');
+    Route::post('updateStatus/{pengajuanCuti}', [PengajuanCutiController::class, 'updateStatus'])->name('updateStatus')->middleware('isAdmin');
+    Route::get('report', [PengajuanCutiController::class, 'report'])->name('report')->middleware('isAdmin');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
