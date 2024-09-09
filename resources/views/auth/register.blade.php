@@ -97,6 +97,18 @@
                 </div>
             @enderror
         </div>
+        <div class="mb-3">
+            <label for="jabatan" class="form-label">Pangkat</label>
+            <input type="text" class="form-control @error('pangkat')
+                is-invalid
+            @enderror"
+                id="pangkat" name="pangkat" value="{{ old('pangkat') }}" autocomplete="off" />
+            @error('pangkat')
+                <div id="validationServer03Feedback" class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
         <div class="mb-3 form-password-toggle">
             <label class="form-label" for="password">Password</label>
             <div class="input-group input-group-merge">

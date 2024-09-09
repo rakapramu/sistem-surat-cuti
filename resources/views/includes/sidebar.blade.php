@@ -93,11 +93,13 @@
                 <div data-i18n="Analytics">Pengajuan Cuti</div>
             </a>
         </li>
-        <li class="menu-item {{ Request::is('dashboard/setting*') ? 'active' : '' }}">
-            <a href="{{ route('setting.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-gear"></i>
-                <div data-i18n="Analytics">Setting</div>
-            </a>
-        </li>
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'Admin')
+            <li class="menu-item {{ Request::is('dashboard/setting*') ? 'active' : '' }}">
+                <a href="{{ route('setting.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-gear"></i>
+                    <div data-i18n="Analytics">Setting</div>
+                </a>
+            </li>
+        @endif
     </ul>
 </aside>

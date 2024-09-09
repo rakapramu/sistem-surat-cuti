@@ -41,12 +41,14 @@ class AuthController extends Controller
             'name' => 'required',
             'nip' => 'required|unique:users',
             'jabatan' => 'required',
+            'pangkat'=>'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
         ]);
         $user = User::create([
             'name' => $request->name,
             'nip' => $request->nip,
+            'pangkat' => $request->pangkat,
             'jabatan' => $request->jabatan,
             'email' => $request->email,
             'role' => 'pegawai',

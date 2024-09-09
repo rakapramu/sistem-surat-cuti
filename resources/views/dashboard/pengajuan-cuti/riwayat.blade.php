@@ -56,8 +56,8 @@
                                 <td class="text-end pdf-container">
                                     @if ($item->status == 'disetujui')
                                         <a class="dropdown-item" href="{{ route('cetak', $item->id) }}">
-                                            <i class="bx bxs-file-pdf me-1"></i> PDF
-                                        </a>                                    
+                                            <i class="bx bxs-file-document me-1"></i> Word
+                                        </a>
                                     @endif
                                 </td>
                             </tr>
@@ -75,7 +75,18 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable();
+            $('#dataTable').DataTable({
+                dom: 'Bfrtip', // Memungkinkan tombol muncul
+                buttons: [{
+                        extend: 'excelHtml5',
+                        title: 'Data Export Excel'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Data Export PDF'
+                    }
+                ]
+            });
 
             $('.update-status').change(function() {
                 var status = $(this).val();
@@ -94,10 +105,10 @@
                         alert('Status updated successfully!');
                         if (status === 'disetujui') {
                             $pdfContainer.html(`
-                            <a class="dropdown-item pdf-link" href="/cuti/${id}/edit">
-                                <i class="bx bxs-file-pdf me-1"></i> PDF
-                            </a>
-                        `);
+                    <a class="dropdown-item word-link" href="/dashboard/cetak/${id}">
+                        <i class="bx bxs-file-document me-1"></i> Word
+                    </a>
+                `);
                         } else {
                             $pdfContainer.html('');
                         }
@@ -107,6 +118,7 @@
                     }
                 });
             });
+
         });
     </script>
 @endpush

@@ -116,17 +116,26 @@ class PengajuanCutiController extends Controller
 
     public function report(Request $request)
     {
-        if ($request->ajax()) {
-            $data = PengajuanCuti::with('user', 'jenisCuti')->get();
-            return DataTables::of($data)
-                ->make(true);
-        }
-        return view('dashboard.pengajuan-cuti.report');
+        // if ($request->ajax()) {
+        //     $data = PengajuanCuti::with('user', 'jenisCuti')->get();
+        //     return DataTables::of($data)
+        //         ->make(true);
+        // }
+        $cutis = PengajuanCuti::with('user', 'jenisCuti')->get();
+        return view('dashboard.pengajuan-cuti.report', compact('cutis'));
     }
 
     public function cetak($id)
     {
         $data = PengajuanCuti::with('user', 'jenisCuti')->where('id', $id)->first();
+        $jumlahCutiTahunan = PengajuanCuti::where('user_id', $data->user->id)
+            ->whereHas('jenisCuti', function ($query) {
+                $query->where('jenis_cuti', 'Cuti Tahunan');
+            })
+            ->count();
+
+        // Jika cuti tahunan sudah diambil lebih dari 12 kali, tampilkan 0
+        $jumlahCutiTahunanTerbatas = $jumlahCutiTahunan >= 12 ? 0 : $jumlahCutiTahunan;
         $setting = Setting::first();
 
 
@@ -134,6 +143,7 @@ class PengajuanCutiController extends Controller
         $tanggalSelesai = Carbon::parse($data->tanggal_selesai_cuti);
         $jumlahHariCuti = $tanggalMulai->diffInDays($tanggalSelesai) + 1;
         // dd($jumlahHariCuti);
+
         // Simbol untuk centang dan kosong
         $checked = '√';
         $unchecked = '';
@@ -147,7 +157,7 @@ class PengajuanCutiController extends Controller
         $cuti_luar_negara = $data->jenisCuti->jenis_cuti === 'cuti diluar tanggungan negara' ? $checked : $unchecked;
 
         // Creating the new document...
-        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template.docx');
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template-new.docx');
         $phpWord->setValues([
             'nama_instansi' => $setting->nama_instansi,
             'alamat_instansi' => $setting->alamta_instansi,
@@ -163,12 +173,14 @@ class PengajuanCutiController extends Controller
             'alasan_cuti' => $data->alasan_cuti,
             'lama_cuti' => $jumlahHariCuti,
             'tanggal_mulai_cuti' => Carbon::parse($data->tanggal_mulai_cuti)->translatedFormat('j F Y'),
-            'cuti tahunan' => $cuti_tahunan, // Checkbox untuk cuti tahunan
-            'cuti besar' => $cuti_besar, // Checkbox untuk cuti besar
-            'cuti sakit' => $cuti_sakit, // Checkbox untuk cuti sakit
-            'cuti melahirkan' => $cuti_melahirkan, // Checkbox untuk cuti melahirkan
-            'cuti alasan penting' => $cuti_alasan_penting, // Checkbox untuk cuti alasan penting
-            'cuti diluar tangunggan negara' => $cuti_luar_negara, // Checkbox untuk cuti luar tanggungan negara
+            'tanggal_keluar_surat' => Carbon::now()->translatedFormat('j F Y'),
+            'cuti tahunan' => $cuti_tahunan,
+            'cuti besar' => $cuti_besar,
+            'cuti sakit' => $cuti_sakit, 
+            'cuti melahirkan' => $cuti_melahirkan, 
+            'cuti alasan penting' => $cuti_alasan_penting, 
+            'cuti diluar tangunggan negara' => $cuti_luar_negara,
+            'jumlah_cuti_tahunan' => $jumlahCutiTahunanTerbatas,
         ]);
         // Path to save the file
         $filePath = storage_path('app/SuratCuti_' . $data->user->name . '.docx');

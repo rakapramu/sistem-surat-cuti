@@ -12,16 +12,15 @@
                         <tr>
                             <th>Nama</th>
                             <th>NIP</th>
-                            {{-- <th>Jenis Cuti</th>
+                            <th>Jenis Cuti</th>
                             <th>Tanggal Mulai Cuti</th>
                             <th>Tanggal Selesai Cuti</th>
                             <th>Alasan Cuti</th>
-                            <th>Status</th>
-                            <th class="text-center">Actions</th> --}}
+                            <th>Status</th> 
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        {{-- @forelse ($cutis as $item)
+                        @forelse ($cutis as $item)
                             <tr>
                                 <td>
                                     <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
@@ -43,29 +42,14 @@
                                     <strong>{{ $item->alasan_cuti }}</strong>
                                 </td>
                                 <td>
-                                    <select name="status" class="form-select update-status" data-id="{{ $item->id }}">
-                                        <option value="disetujui" {{ $item->status == 'disetujui' ? 'selected' : '' }}>
-                                            Disetujui</option>
-                                        <option value="ditolak" {{ $item->status == 'ditolak' ? 'selected' : '' }}>Ditolak
-                                        </option>
-                                        <option value="diproses" {{ $item->status == 'diproses' ? 'selected' : '' }}>
-                                            Diproses
-                                        </option>
-                                    </select>
-                                </td>
-                                <td class="text-end pdf-container">
-                                    @if ($item->status == 'disetujui')
-                                        <a class="dropdown-item" href="{{ route('cuti.edit', $item->id) }}">
-                                            <i class="bx bxs-file-pdf me-1"></i> PDF
-                                        </a>
-                                    @endif
+                                    <strong>{{ $item->status }}</strong>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Data Kosong</td>
+                                <td colspan="7" class="text-center">Data Kosong</td>
                             </tr>
-                        @endforelse --}}
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -76,23 +60,19 @@
     <script>
         var table;
         $(document).ready(function() {
-            table = $('#dataTable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('report') }}",
-                columns: [{
-                        data: 'user.name',
-                        name: 'user.name',
-                        searchable: true
-                    },
-                    {
-                        data: 'user.nip',
-                        name: 'user.nip',
-                        searchable: true
-                    },
-
-                ],
-            });
+            $('#dataTable').DataTable({
+            dom: 'Bfrtip', // Memungkinkan tombol muncul
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data Export Excel'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Data Export PDF'
+                }
+            ]
+        });
         });
     </script>
 @endpush
