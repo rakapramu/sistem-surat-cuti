@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\JenisCuti;
 use App\Models\PengajuanCuti;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -120,5 +122,60 @@ class PengajuanCutiController extends Controller
                 ->make(true);
         }
         return view('dashboard.pengajuan-cuti.report');
+    }
+
+    public function cetak($id)
+    {
+        $data = PengajuanCuti::with('user', 'jenisCuti')->where('id', $id)->first();
+        $setting = Setting::first();
+
+
+        $tanggalMulai = Carbon::parse($data->tanggal_mulai_cuti);
+        $tanggalSelesai = Carbon::parse($data->tanggal_selesai_cuti);
+        $jumlahHariCuti = $tanggalMulai->diffInDays($tanggalSelesai) + 1;
+        // dd($jumlahHariCuti);
+        // Simbol untuk centang dan kosong
+        $checked = '√';
+        $unchecked = '';
+
+        // Tentukan jenis cuti yang diceklis berdasarkan data yang diambil
+        $cuti_tahunan = $data->jenisCuti->jenis_cuti === 'cuti tahunan' ? $checked : $unchecked;
+        $cuti_besar = $data->jenisCuti->jenis_cuti === 'cuti besar' ? $checked : $unchecked;
+        $cuti_sakit = $data->jenisCuti->jenis_cuti === 'cuti sakit' ? $checked : $unchecked;
+        $cuti_melahirkan = $data->jenisCuti->jenis_cuti === 'cuti melahirkan' ? $checked : $unchecked;
+        $cuti_alasan_penting = $data->jenisCuti->jenis_cuti === 'cuti karena alasan penting' ? $checked : $unchecked;
+        $cuti_luar_negara = $data->jenisCuti->jenis_cuti === 'cuti diluar tanggungan negara' ? $checked : $unchecked;
+
+        // Creating the new document...
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template.docx');
+        $phpWord->setValues([
+            'nama_instansi' => $setting->nama_instansi,
+            'alamat_instansi' => $setting->alamta_instansi,
+            'kode_pos' => $setting->kode_pos,
+            'no_telp' => $setting->no_telp,
+            'faks' => $setting->faks,
+            'email' => $setting->email,
+            'laman_web' => $setting->laman_web,
+            'nama' => $data->user->name,
+            'nip' => $data->user->nip,
+            'pangkat' => $data->user->pangkat,
+            'jabatan' => $data->user->jabatan,
+            'alasan_cuti' => $data->alasan_cuti,
+            'lama_cuti' => $jumlahHariCuti,
+            'tanggal_mulai_cuti' => Carbon::parse($data->tanggal_mulai_cuti)->translatedFormat('j F Y'),
+            'cuti tahunan' => $cuti_tahunan, // Checkbox untuk cuti tahunan
+            'cuti besar' => $cuti_besar, // Checkbox untuk cuti besar
+            'cuti sakit' => $cuti_sakit, // Checkbox untuk cuti sakit
+            'cuti melahirkan' => $cuti_melahirkan, // Checkbox untuk cuti melahirkan
+            'cuti alasan penting' => $cuti_alasan_penting, // Checkbox untuk cuti alasan penting
+            'cuti diluar tangunggan negara' => $cuti_luar_negara, // Checkbox untuk cuti luar tanggungan negara
+        ]);
+        // Path to save the file
+        $filePath = storage_path('app/SuratCuti_' . $data->user->name . '.docx');
+        $phpWord->saveAs($filePath);
+
+
+        // Return response to download the file
+        return response()->download($filePath)->deleteFileAfterSend(true);
     }
 }

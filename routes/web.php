@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\CutiController;
 use App\Http\Controllers\Dashboard\PengajuanCutiController;
+use App\Http\Controllers\Dashboard\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -20,5 +21,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('riwayat-pengajuan', [PengajuanCutiController::class, 'riwayat'])->name('riwayatPengajuan')->middleware('isAdmin');
     Route::post('updateStatus/{pengajuanCuti}', [PengajuanCutiController::class, 'updateStatus'])->name('updateStatus')->middleware('isAdmin');
     Route::get('report', [PengajuanCutiController::class, 'report'])->name('report')->middleware('isAdmin');
+    Route::get('cetak/{id}', [PengajuanCutiController::class, 'cetak'])->name('cetak');
+    Route::resource('setting', SettingController::class)->middleware('isAdmin');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });

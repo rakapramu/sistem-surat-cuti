@@ -55,9 +55,9 @@
                                 </td>
                                 <td class="text-end pdf-container">
                                     @if ($item->status == 'disetujui')
-                                        <a class="dropdown-item" href="{{ route('cuti.edit', $item->id) }}">
+                                        <a class="dropdown-item" href="{{ route('cetak', $item->id) }}">
                                             <i class="bx bxs-file-pdf me-1"></i> PDF
-                                        </a>
+                                        </a>                                    
                                     @endif
                                 </td>
                             </tr>

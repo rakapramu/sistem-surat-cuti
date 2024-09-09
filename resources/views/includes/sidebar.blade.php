@@ -67,29 +67,6 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pages</span>
         </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Account Settings">Account Settings</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="pages-account-settings-account.html" class="menu-link">
-                        <div data-i18n="Account">Account</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-account-settings-notifications.html" class="menu-link">
-                        <div data-i18n="Notifications">Notifications</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-account-settings-connections.html" class="menu-link">
-                        <div data-i18n="Connections">Connections</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'Admin')
             <li class="menu-item {{ Request::is('dashboard/cuti*') ? 'active' : '' }}">
                 <a href="{{ route('cuti.index') }}" class="menu-link">
@@ -114,6 +91,12 @@
             <a href="{{ route('pengajuan_cuti.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Pengajuan Cuti</div>
+            </a>
+        </li>
+        <li class="menu-item {{ Request::is('dashboard/setting*') ? 'active' : '' }}">
+            <a href="{{ route('setting.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-gear"></i>
+                <div data-i18n="Analytics">Setting</div>
             </a>
         </li>
     </ul>
