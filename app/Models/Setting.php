@@ -15,6 +15,10 @@ class Setting extends Model
         'email',
         'laman_web',
         'kode_pos',
-        'faks'
+        'faks',
+        'satuan_organisasi',
+        'nama_pimpinan',
+        'jabatan_pimpinan',
+        'nip_jabatan'
     ];
 }

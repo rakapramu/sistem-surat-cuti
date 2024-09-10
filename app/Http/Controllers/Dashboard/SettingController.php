@@ -37,9 +37,28 @@ class SettingController extends Controller
             'no_telp' => 'required',
             'laman_web' => 'required',
             'kode_pos' => 'required',
-            'faks' => 'required'
+            'faks' => 'required',
+            'satuan_organisasi'=>'required',
+            'nama_pimpinan'=>'required',
+            'jabatan_pimpinan'=>'required',
+            'nip_jabatan'=>'required'
         ]);
-        Setting::create($request->all());
+        $nama_instansi = strtoupper($request->nama_instansi);
+        $nama_pimpinan = ucwords($request->nama_pimpinan);
+        $jabatan_pimpinan = ucwords($request->jabatan_pimpinan);
+        Setting::create([
+            'nama_instansi' => $nama_instansi,
+            'alamta_instansi' => $request->alamta_instansi,
+            'email' => $request->email,
+            'no_telp' => $request->no_telp,
+            'laman_web' => $request->laman_web,
+            'kode_pos' => $request->kode_pos,
+            'faks' => $request->faks,
+            'satuan_organisasi' => $request->satuan_organisasi,
+            'nama_pimpinan' => $nama_pimpinan,
+            'jabatan_pimpinan' => $jabatan_pimpinan,
+            'nip_jabatan' => $request->nip_jabatan
+        ]);
         return redirect()->route('setting.index');
     }
 
@@ -71,9 +90,28 @@ class SettingController extends Controller
             'no_telp' => 'required',
             'laman_web' => 'required',
             'kode_pos' => 'required',
-            'faks' => 'required'
+            'faks' => 'required',
+            'satuan_organisasi'=>'required',
+            'nama_pimpinan'=>'required',
+            'jabatan_pimpinan'=>'required',
+            'nip_jabatan'=>'required'
         ]);
-        $setting->update($request->all());
+        $nama_instansi = strtoupper($request->nama_instansi);
+        $nama_pimpinan = ucwords($request->nama_pimpinan);
+        $jabatan_pimpinan = ucwords($request->jabatan_pimpinan);
+        $setting->update([
+            'nama_instansi' => $nama_instansi,
+            'alamta_instansi' => $request->alamta_instansi,
+            'email' => $request->email,
+            'no_telp' => $request->no_telp,
+            'laman_web' => $request->laman_web,
+            'kode_pos' => $request->kode_pos,
+            'faks' => $request->faks,
+            'satuan_organisasi' => $request->satuan_organisasi,
+            'nama_pimpinan' => $nama_pimpinan,
+            'jabatan_pimpinan' => $jabatan_pimpinan,
+            'nip_jabatan' => $request->nip_jabatan
+        ]);
         return redirect()->route('setting.index');
     }
 

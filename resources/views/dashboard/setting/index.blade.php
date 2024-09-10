@@ -4,7 +4,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-header">Jenis Cuti</h5>
             @if ($datas->count() < 1)
-            <a href="{{ route('setting.create') }}" class="btn btn-primary mx-2">Create Data</a>
+                <a href="{{ route('setting.create') }}" class="btn btn-primary mx-2">Create Data</a>
             @endif
         </div>
         <div class="table-responsive text-nowrap">
@@ -14,6 +14,7 @@
                         <th>Nama Instansi</th>
                         <th>Alamat Instansi</th>
                         <th>No Telp</th>
+                        <th>Faks</th>
                         <th>Email</th>
                         <th>Laman Web</th>
                         <th class="text-center">Actions</th>
@@ -33,6 +34,10 @@
                             <td>
                                 <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
                                 <strong>{{ $item->no_telp }}</strong>
+                            </td>
+                            <td>
+                                <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
+                                <strong>{{ $item->faks }}</strong>
                             </td>
                             <td>
                                 <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>

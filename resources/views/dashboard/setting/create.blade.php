@@ -27,6 +27,70 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="basic-default-name">Satuan Organisasi</label>
+                            <div class="col-sm-10">
+                                <input type="text"
+                                    class="form-control @error('satuan_organisasi')
+                                    is-invalid
+                                @enderror"
+                                    id="basic-default-name" name="satuan_organisasi" autocomplete="off"
+                                    value="{{ old('satuan_organisasi') }}" />
+                                @error('satuan_organisasi')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="basic-default-name">Nama Pimpinan</label>
+                            <div class="col-sm-10">
+                                <input type="text"
+                                    class="form-control @error('nama_pimpinan')
+                                    is-invalid
+                                @enderror"
+                                    id="basic-default-name" name="nama_pimpinan" autocomplete="off"
+                                    value="{{ old('nama_pimpinan') }}" />
+                                @error('nama_pimpinan')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="basic-default-name">Jabatan Pimpinan</label>
+                            <div class="col-sm-10">
+                                <input type="text"
+                                    class="form-control @error('jabatan_pimpinan')
+                                    is-invalid
+                                @enderror"
+                                    id="basic-default-name" name="jabatan_pimpinan" autocomplete="off"
+                                    value="{{ old('jabatan_pimpinan') }}" />
+                                @error('jabatan_pimpinan')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="basic-default-name">NIP Pimpinan</label>
+                            <div class="col-sm-10">
+                                <input type="number"
+                                    class="form-control @error('nip_jabatan')
+                                    is-invalid
+                                @enderror"
+                                    id="basic-default-name" name="nip_jabatan" autocomplete="off"
+                                    value="{{ old('nip_jabatan') }}" />
+                                @error('nip_jabatan')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Kode Pos</label>
                             <div class="col-sm-10">
                                 <input type="number"

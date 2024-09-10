@@ -33,7 +33,10 @@ class CutiController extends Controller
         $request->validate([
             'jenis_cuti' => 'required|unique:jenis_cutis'
         ]);
-        JenisCuti::create($request->all());
+        $cuti = strtolower($request->jenis_cuti);
+        JenisCuti::create([
+            'jenis_cuti' => $cuti
+        ]);
         return redirect()->route('cuti.index');
     }
 
@@ -61,7 +64,10 @@ class CutiController extends Controller
         $request->validate([
             'jenis_cuti' => 'required|unique:jenis_cutis'
         ]);
-        $cuti->update($request->all());
+        $jenis_cuti = strtolower($request->jenis_cuti);
+        $cuti->update([
+            'jenis_cuti' => $jenis_cuti
+        ]);
         return redirect()->route('cuti.index');
     }
 

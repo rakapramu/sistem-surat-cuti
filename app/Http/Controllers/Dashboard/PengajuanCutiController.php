@@ -156,11 +156,19 @@ class PengajuanCutiController extends Controller
         $cuti_alasan_penting = $data->jenisCuti->jenis_cuti === 'cuti karena alasan penting' ? $checked : $unchecked;
         $cuti_luar_negara = $data->jenisCuti->jenis_cuti === 'cuti diluar tanggungan negara' ? $checked : $unchecked;
 
+        // create format date now to 10-August-2024
+        $date = Carbon::now()->locale('id')->isoFormat('D MMMM YYYY');
+
         // Creating the new document...
         $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template-new.docx');
         $phpWord->setValues([
             'nama_instansi' => $setting->nama_instansi,
+            'date' => $date,
             'alamat_instansi' => $setting->alamta_instansi,
+            'satuan_organisasi' => $setting->satuan_organisasi,
+            'nama_pimpinan' => $setting->nama_pimpinan,
+            'jabatan_pimpinan' => $setting->jabatan_pimpinan,
+            'nip_jabatan' => $setting->nip_jabatan,
             'kode_pos' => $setting->kode_pos,
             'no_telp' => $setting->no_telp,
             'faks' => $setting->faks,
