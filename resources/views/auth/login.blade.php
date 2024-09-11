@@ -12,8 +12,8 @@
     <form id="formAuthentication" class="mb-3" action="{{ route('loginAction') }}" method="POST">
         @csrf
         <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="text" class="form-control" id="email" name="email" autofocus autocomplete="off" />
+            <label for="email" class="form-label">Email atau NIP</label>
+            <input type="text" class="form-control" id="email" name="login" autofocus autocomplete="off" />
         </div>
         <div class="mb-3 form-password-toggle">
             <label for="password" class="form-label">Password</label>

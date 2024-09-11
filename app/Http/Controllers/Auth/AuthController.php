@@ -19,14 +19,33 @@ class AuthController extends Controller
     public function loginAction(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'login' => 'required', // Bisa email atau nip
             'password' => 'required',
         ]);
-        $credentials = $request->only(['email', 'password']);
-        if (!Auth::attempt($credentials)) {
-            return back()->withErrors(['email' => 'Invalid email or password']);
+
+        // Cek apakah input login berupa email atau nip
+        $loginType = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'nip';
+
+        // Ambil hanya login dan password
+        $credentials = [
+            $loginType => $request->input('login'),
+            'password' => $request->input('password'),
+        ];
+        // dd($credentials);
+        try {
+            //code...
+            if (!Auth::attempt($credentials)) {
+                return back()->withErrors(['login' => 'Invalid email, NIP, or password']);
+            }
+
+            return redirect()->route('dashboard');
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage()
+            ]);
         }
-        return redirect()->route('dashboard');
+
+        // Coba login
     }
 
     public function register()
@@ -41,7 +60,7 @@ class AuthController extends Controller
             'name' => 'required',
             'nip' => 'required|unique:users',
             'jabatan' => 'required',
-            'pangkat'=>'required',
+            'pangkat' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
         ]);

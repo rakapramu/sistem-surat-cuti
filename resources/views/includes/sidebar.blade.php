@@ -43,12 +43,14 @@
                 </a>
             </li>
         @endif
-        <li class="menu-item {{ Request::is('dashboard/pengajuan_cuti*') ? 'active' : '' }}">
-            <a href="{{ route('pengajuan_cuti.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-plus"></i>
-                <div data-i18n="Analytics">Pengajuan Cuti</div>
-            </a>
-        </li>
+        @if (Auth::user()->role == 'pegawai')
+            <li class="menu-item {{ Request::is('dashboard/pengajuan_cuti*') ? 'active' : '' }}">
+                <a href="{{ route('pengajuan_cuti.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-plus"></i>
+                    <div data-i18n="Analytics">Pengajuan Cuti</div>
+                </a>
+            </li>
+        @endif
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'Admin')
             <li class="menu-item {{ Request::is('dashboard/setting*') ? 'active' : '' }}">
                 <a href="{{ route('setting.index') }}" class="menu-link">
