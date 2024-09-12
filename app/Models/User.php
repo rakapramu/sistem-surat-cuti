@@ -23,7 +23,8 @@ class User extends Authenticatable
         'nip',
         'role',
         'pangkat',
-        'jabatan'
+        'jabatan',
+        'divisi_id',
     ];
 
     /**
@@ -52,5 +53,15 @@ class User extends Authenticatable
     public function PengajuanCuti()
     {
         return $this->hasMany(PengajuanCuti::class);
+    }
+
+    public function Divisi()
+    {
+        return $this->belongsTo(Divisi::class);
+    }
+
+    public function DivisiHead()
+    {
+        return $this->hasOne(DivisiHead::class);
     }
 }

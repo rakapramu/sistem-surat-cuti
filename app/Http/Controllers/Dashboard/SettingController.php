@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\DivisiHead;
 use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SettingController extends Controller
@@ -38,14 +40,23 @@ class SettingController extends Controller
             'laman_web' => 'required',
             'kode_pos' => 'required',
             'faks' => 'required',
-            'satuan_organisasi'=>'required',
-            'nama_pimpinan'=>'required',
-            'jabatan_pimpinan'=>'required',
-            'nip_jabatan'=>'required'
+            'satuan_organisasi' => 'required',
+            'nama_pimpinan' => 'required',
+            'jabatan_pimpinan' => 'required',
+            'nip_jabatan' => 'required',
+            'email' => 'required'
         ]);
         $nama_instansi = strtoupper($request->nama_instansi);
         $nama_pimpinan = ucwords($request->nama_pimpinan);
         $jabatan_pimpinan = ucwords($request->jabatan_pimpinan);
+        $user = User::create([
+            'name' => $nama_pimpinan,
+            'email' => $request->email,
+            'password' => $request->nip_jabatan,
+            'nip' => $request->nip_jabatan,
+            'jabatan' => $jabatan_pimpinan,
+            'role' => 'atasan'
+        ]);
         Setting::create([
             'nama_instansi' => $nama_instansi,
             'alamta_instansi' => $request->alamta_instansi,
@@ -91,10 +102,10 @@ class SettingController extends Controller
             'laman_web' => 'required',
             'kode_pos' => 'required',
             'faks' => 'required',
-            'satuan_organisasi'=>'required',
-            'nama_pimpinan'=>'required',
-            'jabatan_pimpinan'=>'required',
-            'nip_jabatan'=>'required'
+            'satuan_organisasi' => 'required',
+            'nama_pimpinan' => 'required',
+            'jabatan_pimpinan' => 'required',
+            'nip_jabatan' => 'required'
         ]);
         $nama_instansi = strtoupper($request->nama_instansi);
         $nama_pimpinan = ucwords($request->nama_pimpinan);

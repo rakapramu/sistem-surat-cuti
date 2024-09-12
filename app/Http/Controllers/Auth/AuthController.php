@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Divisi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +52,8 @@ class AuthController extends Controller
     public function register()
     {
         $title = 'register';
-        return view('auth.register', compact('title'));
+        $divisi = Divisi::get();
+        return view('auth.register', compact('title', 'divisi'));
     }
 
     public function registerAction(Request $request)
@@ -63,6 +65,7 @@ class AuthController extends Controller
             'pangkat' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
+            'divisi_id' => 'required',
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -71,6 +74,7 @@ class AuthController extends Controller
             'jabatan' => $request->jabatan,
             'email' => $request->email,
             'role' => 'pegawai',
+            'divisi_id' => $request->divisi_id,
             'password' => Hash::make($request->password),
         ]);
         Auth::login($user);

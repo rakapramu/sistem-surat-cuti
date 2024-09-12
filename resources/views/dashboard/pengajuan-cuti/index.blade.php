@@ -17,7 +17,6 @@
                             <th>Tanggal Selesai Cuti</th>
                             <th>Alasan Cuti</th>
                             <th>Status</th>
-                            <th>Cetak</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -45,13 +44,6 @@
                                 </td>
                                 <td>
                                     <strong>{{ $item->status }}</strong>
-                                </td>
-                                <td class="text-end pdf-container">
-                                    @if ($item->status == 'disetujui')
-                                        <a class="dropdown-item" href="{{ route('cetak', $item->id) }}">
-                                            <i class="bx bxs-file-document me-1"></i> Word
-                                        </a>
-                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <div class="dropdown">

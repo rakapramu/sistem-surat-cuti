@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\DivisiHead;
 use App\Models\JenisCuti;
+use App\Models\PengajuanAtasan;
 use App\Models\PengajuanCuti;
 use App\Models\Setting;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +21,32 @@ class PengajuanCutiController extends Controller
      */
     public function index()
     {
-        // $cutis = JenisCuti::get();
-        $cutis = PengajuanCuti::where('user_id', Auth::user()->id)->paginate(10);
+        // Ambil semua pengajuan cuti milik user yang sedang login
+        $cutis = PengajuanCuti::where('user_id', Auth::user()->id)
+            ->with('pengajuanAtasan') // Load approval terkait
+            ->paginate(10);
+
+        // Update status akhir pengajuan cuti
+        foreach ($cutis as $cuti) {
+            $approvals = $cuti->pengajuanAtasan;
+            $pengajuanAtasan = $approvals;
+
+            // Jika salah satu atasan menolak, set status menjadi 'rejected'
+            if ($pengajuanAtasan->where('status', 'ditolak')->count() > 0) {
+                $cuti->status = 'ditolak';
+            }
+            // Jika semua atasan setuju, set status menjadi 'approved'
+            elseif ($pengajuanAtasan->where('status', 'disetujui')->count() === 3) {
+                $cuti->status = 'disetujui';
+            } else {
+                // Jika masih ada persetujuan yang pending, tetap 'pending'
+                $cuti->status = 'diproses';
+            }
+
+            // Simpan perubahan status cuti
+            $cuti->save();
+        }
+
         return view('dashboard.pengajuan-cuti.index', compact('cutis'));
     }
 
@@ -43,13 +70,32 @@ class PengajuanCutiController extends Controller
             'tanggal_selesai_cuti' => 'required',
             'alasan_cuti' => 'required'
         ]);
-        PengajuanCuti::create([
+        $pengajuan = PengajuanCuti::create([
             'cuti_id' => $request->cuti_id,
             'tanggal_mulai_cuti' => $request->tanggal_mulai_cuti,
             'tanggal_selesai_cuti' => $request->tanggal_selesai_cuti,
             'alasan_cuti' => $request->alasan_cuti,
             'user_id' => Auth::user()->id
         ]);
+        $divisionId = Auth::user()->divisi_id;
+        $divisionHeads = DivisiHead::where('divisi_id', $divisionId)->get();
+
+        $kepalaDinas = Setting::first();
+        $dataKepalaDinas = User::where('nip', $kepalaDinas->nip_jabatan)->first();
+        PengajuanAtasan::create([
+            'pengajuan_id' => $pengajuan->id,
+            'user_id' => $dataKepalaDinas->id,  // ID kepala dinas
+            'status' => 'diproses',
+        ]);
+
+        // Simpan persetujuan untuk setiap atasan di tabel `approvals`
+        foreach ($divisionHeads as $head) {
+            PengajuanAtasan::create([
+                'pengajuan_id' => $pengajuan->id,
+                'user_id' => $head->user_id,  // ID atasan
+                'status' => 'diproses',
+            ]);
+        }
         return redirect()->route('pengajuan_cuti.index');
     }
 
@@ -137,7 +183,12 @@ class PengajuanCutiController extends Controller
         // Jika cuti tahunan sudah diambil lebih dari 12 kali, tampilkan 0
         $jumlahCutiTahunanTerbatas = $jumlahCutiTahunan >= 12 ? 0 : $jumlahCutiTahunan;
         $setting = Setting::first();
-
+        $sisaSatu = 0;
+        $sisaDua = 0;
+        if ($jumlahCutiTahunanTerbatas != 0) {
+            $sisaSatu = $jumlahCutiTahunanTerbatas - 1;
+            $sisaDua = $sisaSatu - 1;
+        }
 
         $tanggalMulai = Carbon::parse($data->tanggal_mulai_cuti);
         $tanggalSelesai = Carbon::parse($data->tanggal_selesai_cuti);
@@ -159,8 +210,27 @@ class PengajuanCutiController extends Controller
         // create format date now to 10-August-2024
         $date = Carbon::now()->locale('id')->isoFormat('D MMMM YYYY');
 
+        // Ambil data atasan berdasarkan pengajuan_id
+        $data_atasan = PengajuanAtasan::where('pengajuan_id', $data->id)->get();
+        // Inisialisasi array untuk menyimpan divisi head
+        $divisi_heads = [];
+
+        foreach ($data_atasan as $key => $item) {
+            // Ambil data DivisiHead berdasarkan user_id dari $item
+            $divisi_head = DivisiHead::where('user_id', $item->user_id)->first();
+
+            // Simpan divisi_head ke dalam array dengan user_id sebagai key
+            if ($divisi_head) {
+                $divisi_heads[$key] = $divisi_head;
+            }
+        }
+
+        $atasan1 = $divisi_heads[1] ?? null;
+        $atasan2 = $divisi_heads[2] ?? null;
+
+
         // Creating the new document...
-        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template-new.docx');
+        $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template-new-lagi.docx');
         $phpWord->setValues([
             'nama_instansi' => $setting->nama_instansi,
             'date' => $date,
@@ -184,11 +254,19 @@ class PengajuanCutiController extends Controller
             'tanggal_keluar_surat' => Carbon::now()->translatedFormat('j F Y'),
             'cuti tahunan' => $cuti_tahunan,
             'cuti besar' => $cuti_besar,
-            'cuti sakit' => $cuti_sakit, 
-            'cuti melahirkan' => $cuti_melahirkan, 
-            'cuti alasan penting' => $cuti_alasan_penting, 
+            'cuti sakit' => $cuti_sakit,
+            'cuti melahirkan' => $cuti_melahirkan,
+            'cuti alasan penting' => $cuti_alasan_penting,
             'cuti diluar tangunggan negara' => $cuti_luar_negara,
             'jumlah_cuti_tahunan' => $jumlahCutiTahunanTerbatas,
+            'atasan1' => $atasan1->user->name,
+            'jabatan_atasan1' => $atasan1->user->jabatan,
+            'nip_atasan1' => $atasan1->user->nip,
+            'atasan2' => $atasan2->user->name,
+            'jabatan_atasan2' => $atasan2->user->jabatan,
+            'nip_atasan2' => $atasan2->user->nip,
+            'sisa_satu' => $sisaSatu,
+            'sisa_dua' => $sisaDua,
         ]);
         // Path to save the file
         $filePath = storage_path('app/SuratCuti_' . $data->user->name . '.docx');

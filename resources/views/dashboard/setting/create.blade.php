@@ -59,6 +59,21 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="basic-default-name">Email Pimpinan</label>
+                            <div class="col-sm-10">
+                                <input type="email"
+                                    class="form-control @error('email')
+                                    is-invalid
+                                @enderror"
+                                    id="basic-default-name" name="email" autocomplete="off" value="{{ old('email') }}" />
+                                @error('email')
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Jabatan Pimpinan</label>
                             <div class="col-sm-10">
                                 <input type="text"

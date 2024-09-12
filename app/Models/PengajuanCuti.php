@@ -25,4 +25,9 @@ class PengajuanCuti extends Model
     {
         return $this->belongsTo(JenisCuti::class, 'cuti_id');
     }
+
+    public function pengajuanAtasan()
+    {
+        return $this->hasMany(PengajuanAtasan::class, 'pengajuan_id', 'id');
+    }
 }

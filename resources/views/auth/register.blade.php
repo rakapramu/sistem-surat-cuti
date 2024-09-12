@@ -109,6 +109,23 @@
                 </div>
             @enderror
         </div>
+        <div class="mb-3">
+            <label for="jabatan" class="form-label">Divisi</label>
+            <select name="divisi_id"
+                class="form-select @error('divisi_id')
+                is-invalid
+            @enderror" id="">
+                <option value="" selected disabled>Pilih Divisi</option>
+                @foreach ($divisi as $divisi)
+                    <option value="{{ $divisi->id }}">{{ $divisi->name }}</option>
+                @endforeach
+            </select>
+            @error('pangkat')
+                <div id="validationServer03Feedback" class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
         <div class="mb-3 form-password-toggle">
             <label class="form-label" for="password">Password</label>
             <div class="input-group input-group-merge">

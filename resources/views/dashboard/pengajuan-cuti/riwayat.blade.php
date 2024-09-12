@@ -43,7 +43,7 @@
                                     <strong>{{ $item->alasan_cuti }}</strong>
                                 </td>
                                 <td>
-                                    <select name="status" class="form-select update-status" data-id="{{ $item->id }}">
+                                    {{-- <select name="status" class="form-select update-status" data-id="{{ $item->id }}">
                                         <option value="disetujui" {{ $item->status == 'disetujui' ? 'selected' : '' }}>
                                             Disetujui</option>
                                         <option value="ditolak" {{ $item->status == 'ditolak' ? 'selected' : '' }}>Ditolak
@@ -51,7 +51,8 @@
                                         <option value="diproses" {{ $item->status == 'diproses' ? 'selected' : '' }}>
                                             Diproses
                                         </option>
-                                    </select>
+                                    </select> --}}
+                                    <strong>{{ $item->status }}</strong>
                                 </td>
                                 <td class="text-end pdf-container">
                                     @if ($item->status == 'disetujui')

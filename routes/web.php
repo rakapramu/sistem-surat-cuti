@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\CutiController;
+use App\Http\Controllers\Dashboard\DivisiController;
+use App\Http\Controllers\Dashboard\DivisiHeadController;
 use App\Http\Controllers\Dashboard\PengajuanCutiController;
 use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\SuratMasukController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -23,5 +26,10 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('report', [PengajuanCutiController::class, 'report'])->name('report')->middleware('isAdmin');
     Route::get('cetak/{id}', [PengajuanCutiController::class, 'cetak'])->name('cetak');
     Route::resource('setting', SettingController::class)->middleware('isAdmin');
+    Route::resource('divisi', DivisiController::class)->middleware('isAdmin');
+    Route::resource('divisi-head', DivisiHeadController::class)->middleware('isAdmin');
+
+    Route::get('surat-masuk', [SuratMasukController::class, 'index'])->name('suratMasuk');
+    Route::post('updateStatusAtasan/{pengajuanCuti}', [SuratMasukController::class, 'updateStatus'])->name('updateStatusAtasan');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });

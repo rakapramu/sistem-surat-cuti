@@ -51,7 +51,27 @@
                 </a>
             </li>
         @endif
+        @if (Auth::user()->role == 'atasan')
+            <li class="menu-item {{ Request::is('dashboard/surat*') ? 'active' : '' }}">
+                <a href="{{ route('suratMasuk') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-plus"></i>
+                    <div data-i18n="Analytics">Suart Cuti Masuk</div>
+                </a>
+            </li>
+        @endif
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'Admin')
+            <li class="menu-item {{ Request::is('dashboard/divisi*') ? 'active' : '' }}">
+                <a href="{{ route('divisi.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-cog"></i>
+                    <div data-i18n="Analytics">Divisi</div>
+                </a>
+            </li>
+            <li class="menu-item {{ Request::is('dashboard/divisi-head*') ? 'active' : '' }}">
+                <a href="{{ route('divisi-head.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-cog"></i>
+                    <div data-i18n="Analytics">Kepala Divisi</div>
+                </a>
+            </li>
             <li class="menu-item {{ Request::is('dashboard/setting*') ? 'active' : '' }}">
                 <a href="{{ route('setting.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-cog"></i>
