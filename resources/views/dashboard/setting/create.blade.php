@@ -173,12 +173,12 @@
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Email</label>
                             <div class="col-sm-10">
                                 <input type="email"
-                                    class="form-control @error('email')
+                                    class="form-control @error('email_setting')
                                     is-invalid
                                 @enderror"
-                                    id="basic-default-name" name="email" autocomplete="off"
-                                    value="{{ old('email') }}" />
-                                @error('email')
+                                    id="basic-default-name" name="email_setting" autocomplete="off"
+                                    value="{{ old('email_setting') }}" />
+                                @error('email_setting')
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         {{ $message }}
                                     </div>

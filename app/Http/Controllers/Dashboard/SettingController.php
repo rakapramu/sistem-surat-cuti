@@ -32,10 +32,11 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'nama_instansi' => 'required',
             'alamta_instansi' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:users',
             'no_telp' => 'required',
             'laman_web' => 'required',
             'kode_pos' => 'required',
@@ -44,7 +45,7 @@ class SettingController extends Controller
             'nama_pimpinan' => 'required',
             'jabatan_pimpinan' => 'required',
             'nip_jabatan' => 'required',
-            'email' => 'required'
+            'email_setting' => 'required'
         ]);
         $nama_instansi = strtoupper($request->nama_instansi);
         $nama_pimpinan = ucwords($request->nama_pimpinan);
@@ -60,7 +61,7 @@ class SettingController extends Controller
         Setting::create([
             'nama_instansi' => $nama_instansi,
             'alamta_instansi' => $request->alamta_instansi,
-            'email' => $request->email,
+            'email' => $request->email_setting,
             'no_telp' => $request->no_telp,
             'laman_web' => $request->laman_web,
             'kode_pos' => $request->kode_pos,
