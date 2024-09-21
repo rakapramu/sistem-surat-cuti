@@ -181,7 +181,16 @@ class PengajuanCutiController extends Controller
             ->count();
 
         // Jika cuti tahunan sudah diambil lebih dari 12 kali, tampilkan 0
-        $jumlahCutiTahunanTerbatas = $jumlahCutiTahunan >= 12 ? 0 : $jumlahCutiTahunan;
+        $jumlahCutiTahunanTerbatas = 0;
+        if ($data->jenisCuti->jenis_cuti === 'cuti tahunan') {
+            if ($jumlahCutiTahunan >= 12) {
+                $jumlahCutiTahunanTerbatas = 0;
+            } elseif ($jumlahCutiTahunan === 0) {
+                $jumlahCutiTahunanTerbatas = 12;
+            } else {
+                $jumlahCutiTahunanTerbatas = 12 - $jumlahCutiTahunan;
+            }
+        }
         $setting = Setting::first();
         $sisaSatu = 0;
         $sisaDua = 0;
@@ -212,6 +221,7 @@ class PengajuanCutiController extends Controller
 
         // Ambil data atasan berdasarkan pengajuan_id
         $data_atasan = PengajuanAtasan::where('pengajuan_id', $data->id)->get();
+
         // Inisialisasi array untuk menyimpan divisi head
         $divisi_heads = [];
 
