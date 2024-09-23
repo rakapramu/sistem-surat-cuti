@@ -278,8 +278,11 @@ class PengajuanCutiController extends Controller
             'sisa_satu' => $sisaSatu,
             'sisa_dua' => $sisaDua,
         ]);
-        // Path to save the file
-        $filePath = storage_path('app/SuratCuti_' . $data->user->name . '.docx');
+        // Bersihkan karakter yang tidak diizinkan dari nama file
+        $safeFileName = preg_replace('/[^A-Za-z0-9\-]/', '-', str_replace(' ', '-', $data->user->name));
+
+        // Path file
+        $filePath = storage_path('app/SuratCuti-' . $safeFileName . '.docx');
         $phpWord->saveAs($filePath);
 
 
