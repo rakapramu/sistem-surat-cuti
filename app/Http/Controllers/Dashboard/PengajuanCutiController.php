@@ -68,35 +68,46 @@ class PengajuanCutiController extends Controller
             'cuti_id' => 'required',
             'tanggal_mulai_cuti' => 'required',
             'tanggal_selesai_cuti' => 'required',
-            'alasan_cuti' => 'required'
+            'alasan_cuti' => 'required',
+            'file_pendukung' => 'required|mimes:pdf,doc,jpg,jpeg,png'
         ]);
-        $pengajuan = PengajuanCuti::create([
-            'cuti_id' => $request->cuti_id,
-            'tanggal_mulai_cuti' => $request->tanggal_mulai_cuti,
-            'tanggal_selesai_cuti' => $request->tanggal_selesai_cuti,
-            'alasan_cuti' => $request->alasan_cuti,
-            'user_id' => Auth::user()->id
-        ]);
-        $divisionId = Auth::user()->divisi_id;
-        $divisionHeads = DivisiHead::where('divisi_id', $divisionId)->get();
+        try {
+            if ($request->has('file_pendukung')) {
+                $file = $request->file('file_pendukung');
+                $fileName = time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('public/pengajuan_cuti', $fileName);
+            }
+            $pengajuan = PengajuanCuti::create([
+                'cuti_id' => $request->cuti_id,
+                'tanggal_mulai_cuti' => $request->tanggal_mulai_cuti,
+                'tanggal_selesai_cuti' => $request->tanggal_selesai_cuti,
+                'alasan_cuti' => $request->alasan_cuti,
+                'user_id' => Auth::user()->id,
+                'file_pendukung' => $path
+            ]);
+            $divisionId = Auth::user()->divisi_id;
+            $divisionHeads = DivisiHead::where('divisi_id', $divisionId)->get();
 
-        $kepalaDinas = Setting::first();
-        $dataKepalaDinas = User::where('nip', $kepalaDinas->nip_jabatan)->first();
-        PengajuanAtasan::create([
-            'pengajuan_id' => $pengajuan->id,
-            'user_id' => $dataKepalaDinas->id,  // ID kepala dinas
-            'status' => 'diproses',
-        ]);
-
-        // Simpan persetujuan untuk setiap atasan di tabel `approvals`
-        foreach ($divisionHeads as $head) {
+            $kepalaDinas = Setting::first();
+            $dataKepalaDinas = User::where('nip', $kepalaDinas->nip_jabatan)->first();
             PengajuanAtasan::create([
                 'pengajuan_id' => $pengajuan->id,
-                'user_id' => $head->user_id,  // ID atasan
+                'user_id' => $dataKepalaDinas->id,  // ID kepala dinas
                 'status' => 'diproses',
             ]);
+
+            // Simpan persetujuan untuk setiap atasan di tabel `approvals`
+            foreach ($divisionHeads as $head) {
+                PengajuanAtasan::create([
+                    'pengajuan_id' => $pengajuan->id,
+                    'user_id' => $head->user_id,  // ID atasan
+                    'status' => 'diproses',
+                ]);
+            }
+            return redirect()->route('pengajuan_cuti.index');
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
         }
-        return redirect()->route('pengajuan_cuti.index');
     }
 
     /**
@@ -237,8 +248,6 @@ class PengajuanCutiController extends Controller
 
         $atasan1 = $divisi_heads[1] ?? null;
         $atasan2 = $divisi_heads[2] ?? null;
-        // dd($atasan2->user->jabatan);
-
         // Creating the new document...
         $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template-new-lagi.docx');
         $phpWord->setValues([
@@ -279,9 +288,9 @@ class PengajuanCutiController extends Controller
             'sisa_dua' => $sisaDua,
         ]);
         // Bersihkan karakter yang tidak diizinkan dari nama file
-        // $safeFileName = preg_replace('/[^A-Za-z0-9\-]/', '-', str_replace(' ', '-', $data->user->name));
+        $safeFileName = preg_replace('/[^A-Za-z0-9\-]/', '-', str_replace(' ', '-', $data->user->name));
 
-        $safeFileName = explode(' ', $data->user->name)[0];
+        $safeFileName = $data->user->name;
         // Path file
         $filePath = storage_path('app/SuratCuti_' . $safeFileName . '.docx');
         $phpWord->saveAs($filePath);
