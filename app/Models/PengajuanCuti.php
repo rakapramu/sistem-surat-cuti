@@ -15,6 +15,7 @@ class PengajuanCuti extends Model
         'tanggal_mulai_cuti',
         'tanggal_selesai_cuti',
         'status',
+        'file_pendukung'
     ];
     public function user()
     {

@@ -8,7 +8,7 @@
                     <h5 class="mb-0">Pengajuan Cuti</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('pengajuan_cuti.store') }}" method="POST">
+                    <form action="{{ route('pengajuan_cuti.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label" for="basic-default-fullname">Nama Lengkap</label>
@@ -39,7 +39,8 @@
                                 id="">
                                 <option disabled selected>--Pilih Cuti--</option>
                                 @foreach ($cutis as $item)
-                                    <option value="{{ $item->id }}">{{ ucwords($item->jenis_cuti) }}</option>
+                                    <option value="{{ $item->id }}" {{ old('cuti_id') == $item->id ? 'selected' : '' }}>
+                                        {{ ucwords($item->jenis_cuti) }}</option>
                                 @endforeach
                             </select>
                             @error('cuti_id')
@@ -76,12 +77,18 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="basic-default-message">Alasan Cuti</label>
-                            <textarea id="basic-default-message"
-                                class="form-control @error('alasan_cuti')
-                                is-invalid
-                            @enderror"
-                                name="alasan_cuti">{{ old('alasan_cuti') }}</textarea>
+                            <textarea id="basic-default-message" class="form-control @error('alasan_cuti') is-invalid @enderror" name="alasan_cuti">{{ old('alasan_cuti') }}</textarea>
                             @error('alasan_cuti')
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">File Pendukung</label>
+                            <input type="file" class="form-control @error('file_pendukung') is-invalid @enderror"
+                                id="basic-default-fullname" name="file_pendukung" />
+                            @error('file_pendukung')
                                 <div id="validationServer03Feedback" class="invalid-feedback">
                                     {{ $message }}
                                 </div>

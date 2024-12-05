@@ -36,12 +36,12 @@
                     <div data-i18n="Analytics">Riwayat Pengajuan</div>
                 </a>
             </li>
-            <li class="menu-item {{ Request::is('dashboard/report*') ? 'active' : '' }}">
+            {{-- <li class="menu-item {{ Request::is('dashboard/report*') ? 'active' : '' }}">
                 <a href="{{ route('report') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-book"></i>
                     <div data-i18n="Analytics">Repor Pengajuan</div>
                 </a>
-            </li>
+            </li> --}}
         @endif
         @if (Auth::user()->role == 'pegawai')
             <li class="menu-item {{ Request::is('dashboard/pengajuan_cuti*') ? 'active' : '' }}">

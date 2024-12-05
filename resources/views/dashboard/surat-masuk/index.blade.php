@@ -15,6 +15,7 @@
                             <th>Tanggal Mulai Cuti</th>
                             <th>Tanggal Selesai Cuti</th>
                             <th>Alasan Cuti</th>
+                            <th>Bukti</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -39,6 +40,13 @@
                                 </td>
                                 <td>
                                     <strong>{{ $item->leaverequest->alasan_cuti }}</strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        <a href="{{ Storage::url($item->leaverequest->file_pendukung) }}"
+                                            target="_blank">Lihat File
+                                            Pendukung</a>
+                                    </strong>
                                 </td>
                                 <td>
                                     <select name="status" class="form-select update-status" data-id="{{ $item->id }}">
