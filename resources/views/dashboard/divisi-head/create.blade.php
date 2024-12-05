@@ -132,7 +132,7 @@
                                         is-invalid
                                     @enderror"
                                         id="">
-                                        <option value="" disabled selected>Pilih Level Atasan</option>
+                                        <option value="" disabled selected>Pilih Divisi Atasan</option>
                                         @foreach ($divisi as $item)
                                             <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                                         @endforeach

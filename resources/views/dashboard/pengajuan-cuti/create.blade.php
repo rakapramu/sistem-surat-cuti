@@ -21,12 +21,12 @@
                                 value="{{ Auth::user()->nip }}" readonly />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-default-fullname">Pangkat/Jabatan</label>
+                            <label class="form-label" for="basic-default-fullname">Jabatan</label>
                             <input type="text" class="form-control" id="basic-default-fullname"
                                 value="{{ Auth::user()->jabatan }}" readonly />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-default-fullname">Pangkat/Jabatan</label>
+                            <label class="form-label" for="basic-default-fullname">Email</label>
                             <input type="text" class="form-control" id="basic-default-fullname"
                                 value="{{ Auth::user()->email }}" readonly />
                         </div>

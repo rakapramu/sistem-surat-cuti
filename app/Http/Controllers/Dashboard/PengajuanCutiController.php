@@ -227,7 +227,7 @@ class PengajuanCutiController extends Controller
 
         foreach ($data_atasan as $key => $item) {
             // Ambil data DivisiHead berdasarkan user_id dari $item
-            $divisi_head = DivisiHead::where('user_id', $item->user_id)->first();
+            $divisi_head = DivisiHead::with('user')->where('user_id', $item->user_id)->first();
 
             // Simpan divisi_head ke dalam array dengan user_id sebagai key
             if ($divisi_head) {
@@ -237,7 +237,7 @@ class PengajuanCutiController extends Controller
 
         $atasan1 = $divisi_heads[1] ?? null;
         $atasan2 = $divisi_heads[2] ?? null;
-
+        // dd($atasan2->user->jabatan);
 
         // Creating the new document...
         $phpWord = new \PhpOffice\PhpWord\TemplateProcessor('template-new-lagi.docx');

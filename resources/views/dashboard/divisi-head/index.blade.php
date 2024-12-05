@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-header">Divisi</h5>
+            <h5 class="card-header">Kepala Divisi</h5>
             <a href="{{ route('divisi-head.create') }}" class="btn btn-primary mx-2">Create Data</a>
         </div>
         <div class="table-responsive text-nowrap">
@@ -28,7 +28,7 @@
                             </td>
                             <td>
                                 <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
-                                <strong>Atasn {{ ucwords($item->level) }}</strong>
+                                <strong>Atasan {{ ucwords($item->level) }}</strong>
                             </td>
                             <td class="text-center">
                                 <div class="dropdown">

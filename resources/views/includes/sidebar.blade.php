@@ -39,7 +39,7 @@
             <li class="menu-item {{ Request::is('dashboard/report*') ? 'active' : '' }}">
                 <a href="{{ route('report') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-book"></i>
-                    <div data-i18n="Analytics">Repor Pengajuan</div>
+                    <div data-i18n="Analytics">Report Pengajuan</div>
                 </a>
             </li>
         @endif
@@ -55,7 +55,7 @@
             <li class="menu-item {{ Request::is('dashboard/surat*') ? 'active' : '' }}">
                 <a href="{{ route('suratMasuk') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-plus"></i>
-                    <div data-i18n="Analytics">Suart Cuti Masuk</div>
+                    <div data-i18n="Analytics">Surat Cuti Masuk</div>
                 </a>
             </li>
         @endif

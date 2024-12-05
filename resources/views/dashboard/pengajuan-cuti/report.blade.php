@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-header">Riawayat Pengajuan Cuti</h5>
+            <h5 class="card-header">Riwayat Pengajuan Cuti</h5>
             {{-- <a href="{{ route('cuti.create') }}" class="btn btn-primary mx-2">Create Data</a> --}}
         </div>
         <div class="card-body">

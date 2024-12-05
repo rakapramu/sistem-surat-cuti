@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-header">Jenis Cuti</h5>
+            <h5 class="card-header">Setting</h5>
             @if ($datas->count() < 1)
                 <a href="{{ route('setting.create') }}" class="btn btn-primary mx-2">Create Data</a>
             @endif
@@ -42,10 +42,6 @@
                             <td>
                                 <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
                                 <strong>{{ $item->email }}</strong>
-                            </td>
-                            <td>
-                                <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
-                                <strong>{{ $item->no_telp }}</strong>
                             </td>
                             <td>
                                 <i class="fab fa-bootstrap fa-lg text-primary me-3"></i>
